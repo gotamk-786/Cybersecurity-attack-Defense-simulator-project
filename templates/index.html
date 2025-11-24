@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Attack &amp; Defense Simulator</title>
+    <!-- Load Plotly locally so charts work offline or when CDN is blocked -->
+    <script src="{{ url_for('static', filename='plotly.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        if (!window.Plotly) {
+            const cdn = document.createElement("script");
+            cdn.src = "https://cdn.plot.ly/plotly-latest.min.js";
+            document.head.appendChild(cdn);
+        }
+    </script>
+</head>
+<body>
+    <div class="matrix-bg"></div>
+    <div class="noise-overlay"></div>
+    <div class="container hud-border">
+        <header class="header">
+            <h1 class="glow-title">Live Cybersecurity Dashboard</h1>
+            <p>Track normal vs malicious traffic, firewall blocks, and simulated IDS load.</p>
+            <div class="attack-console">
+                <button class="glow-btn" id="attackBtn">
+                    <span class="btn-led" id="attack-led"></span>
+                    Start Attack Simulation
+                </button>
+                <p id="attack-status"></p>
+            </div>
+            <div id="statusBanner" class="status-banner status-ok">System idle. Awaiting traffic...</div>
+            <div id="urlBanner" class="status-banner status-url hidden">URL Traffic Mode Active</div>
+            <div class="console-line" id="consoleLine">&gt; Awaiting command...</div>
+        </header>
+
+        <section class="hud-cards">
+            <div class="hud-card">
+                <h3>Packets / sec</h3>
+                <p id="pps">0.0</p>
+            </div>
+            <div class="hud-card">
+                <h3>Last Event</h3>
+                <p id="last-event">Waiting for data...</p>
+            </div>
+            <div class="hud-card">
+                <h3>Active Alerts</h3>
+                <p id="alert-count">0</p>
+            </div>
+        </section>
+
+        <main>
+            <section class="plotly-graph hud-border" id="graph"></section>
+
+            <section id="stats" class="stats-panel hud-border">
+                <h2>Network Stats</h2>
+                <table>
+                    <tr>
+                        <td>Normal Packets</td>
+                        <td id="normal">0</td>
+                    </tr>
+                    <tr>
+                        <td>Malicious Packets</td>
+                        <td id="malicious">0</td>
+                    </tr>
+                    <tr>
+                        <td>Blocked Packets</td>
+                        <td id="blocked">0</td>
+                    </tr>
+                    <tr>
+                        <td>Server Load</td>
+                        <td id="load">0%</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section class="timeline hud-border">
+                <h2>Alert Timeline</h2>
+                <ul id="alertTimeline"></ul>
+            </section>
+
+            <section class="terminal hud-border">
+                <h2>Packet Log (Wireshark Style)</h2>
+                <table border="1" id="pktTable" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>IP</th>
+                            <th>Port</th>
+                            <th>Raw Data</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pktBody">
+                    </tbody>
+                </table>
+                <details id="lastPacketDetails" class="packet-details">
+                    <summary>Last Packet Details</summary>
+                    <div id="lastPacketBody">
+                        <p>No packets captured yet.</p>
+                    </div>
+                </details>
+            </section>
+        </main>
+    </div>
+
+    <footer class="team-footer">
+        <p class="footer-heading">Team Members</p>
+        <ul>
+            <li>Gotam Kumar (23k-0860)</li>
+            <li>Mohit Kumar (23k-2035)</li>
+            <li>Ahmed Raza (22k-4780)</li>
+        </ul>
+        <p class="campus-tag">FAST NUCES - Karachi Campus</p>
+    </footer>
+
+    <script id="graph-data" type="application/json">{{ graph_json|safe }}</script>
+
+    <!-- Mode selection modal -->
+    <div id="trafficModeModal" class="modal-overlay">
+        <div class="modal-card hud-border">
+            <h3>Select Traffic Mode</h3>
+            <label class="mode-option">
+                <input type="radio" name="mode" value="dynamic" checked>
+                Dynamic Random Traffic (existing attack simulation)
+            </label>
+            <label class="mode-option">
+                <input type="radio" name="mode" value="url">
+                URL Traffic Capture
+            </label>
+            <div class="url-input-row">
+                <input type="text" id="urlInput" placeholder="https://example.com">
+                <span id="urlError" class="url-error"></span>
+            </div>
+            <div class="modal-actions">
+                <button class="glow-btn" id="modeStartBtn" onclick="startMode()">
+                    Start
+                </button>
+                <button class="ghost-btn" id="modeCancelBtn" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}?v=8"></script>
+</body>
+</html>
+
+
