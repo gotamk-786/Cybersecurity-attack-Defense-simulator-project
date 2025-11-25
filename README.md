@@ -173,6 +173,8 @@ Switch modes by button/reload – Dynamic for varied demos, attack for quick tes
 (Screenshots future mein lagau ga – Abhi placeholders hain. "screenshots" folder banao, PNG files add karo, paths update karo. )
 
 ![Dashboard Initial](screenshots/dashboard.png) – Initial view with stats and empty graph.
+![select mode](screenshots/mode.png) – show mode
+![select mode](screenshots/mode.png) – show mode
 
 ![Attack in Progress](screenshots/attack.png) – Graph spiking red during flood, stats updating.
 
